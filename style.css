@@ -1,0 +1,273 @@
+@font-face {
+    font-family: 'Zabars';
+    font-style: normal;
+    font-weight: 400;
+    src: url('fonts/Zabars.ttf');
+}
+
+body {
+    margin: 0px;
+    height: 100vh;
+    font-family: 'Zabars', Arial, Helvetica, sans-serif;
+    letter-spacing: 2px;
+    font-size: 24px;
+    color: #754C24;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-image: url('img/desert.png');
+    background-size: cover;
+}
+
+.display-none {
+    display: none !important;
+}
+
+.visibility-none {
+    visibility: hidden;
+}
+
+h1 {
+    color: #821B08;
+    text-shadow: 1px 2px 4px #FFDB00;
+    font-size: 48px;
+}
+
+.stage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game {
+    position: relative;
+    display: flex;
+}
+
+canvas {
+    position: relative;
+    background-color: black;
+    display: block;
+}
+
+.overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+.panel {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel button {
+    margin: 8px;
+    padding: 8px 8px;
+    font-family: 'Zabars';
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: black;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.8);
+    background-color: #FF9247;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 50px;
+    border: 5px solid #821B08;
+}
+
+.panel span {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 16px;
+    padding: 15px;
+    font-family: 'Zabars';
+    font-size: 72px;
+    letter-spacing: 2px;
+    text-align: center;
+    color: #821B08;
+    text-shadow: 1px 2px 4px #FFDB00;
+}
+
+.instruc {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.instrucWrapper {
+    box-sizing: border-box;
+    padding: 8px;
+    text-align: center;
+    width: 100%;
+}
+
+.instrucWrapper span {
+    font-family: 'Zabars';
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: black;
+    text-shadow: 1px 2px 4px #821B08;
+
+}
+
+.empty {
+    width: 50px;
+    height: 50px;
+}
+
+#introStart {
+    background-image: url('img/9_intro_outro_screens/start/startscreen_1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: #994409;
+}
+
+
+#outroLost {
+    background-image: url('img/9_intro_outro_screens/game_over/oh no you lost!.png');
+    background-size: contain;
+}
+
+.stage:fullscreen {
+    background-image: url('img/desert.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.hud {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hud button {
+    width: 150px;
+    margin: 8px;
+    padding: 0px 0px;
+    color: #821B08;
+    background-color: #FF9247;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 50px;
+    border: 2px solid #821B08;
+}
+
+.panelBottom {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.panelWrapper {
+    display: flex;
+}
+
+.panelWrapper button {
+    width: 36px;
+    height: 36px;
+}
+
+.toggleSwitch {
+    display: flex;
+}
+
+#btn-music-off {
+    padding-bottom: 2px;
+}
+
+#rotate {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#rotate span {
+    font-size: 24px;
+    text-align: center;
+}
+
+
+/* responsiveness */
+@media (max-width: 1000px) {
+    h1 {
+        display: none;
+    }
+
+    .panel {
+        width: 100%;
+        height: 100%;
+    }
+
+    .overlay {
+        width: 100%;
+        height: 100%;
+    }
+
+    #introStart {
+        width: 100%;
+        height: 100%;
+        background-size: contain;
+    }
+
+    #outroWin {
+        width: 100%;
+        height: 100%;
+        background-size: contain;
+    }
+
+    #outroLost {
+        width: 100%;
+        height: 100%;
+        background-size: contain;
+    }
+
+    .instruc {
+        display: none !important;
+    }
+
+    .hud {
+        display: flex;
+    }
+
+    .panelIntro {
+        display: none;
+    }
+
+    .panel span {
+        font-size: 48px;
+    }
+
+    .panel button {
+        font-size: 36px
+    }
+}
+
+/* Smartphones */
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
+}

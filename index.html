@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html translate="no">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg" href="./img/favicon.svg">
+    <link rel="stylesheet" href="style.css">
+    <script src="models/level.class.js"></script>
+    <script src="models/keyboard.class.js"></script>
+    <script src="models/drawable-object.class.js"></script>
+    <script src="models/moveable-object.class.js"></script>
+    <script src="models/throwable-object.class.js"></script>
+    <script src="models/character.class.js"></script>
+    <script src="models/chicken.class.js"></script>
+    <script src="models/chickenSmall.class.js"></script>
+    <script src="models/cloud.class.js"></script>
+    <script src="models/salsa-bottle.class.js"></script>
+    <script src="models/coin.class.js"></script>
+    <script src="models/background-object.class.js"></script>
+    <script src="models/statusbar.class.js"></script>
+    <script src="js/game.js"></script>
+    <script src="models/endboss.class.js"></script>
+    <script src="levels/level1.js"></script>
+    <script src="models/world.class.js"></script>
+    <script src="js/restart.js"></script>
+    <title>El Pollo Loco</title>
+</head>
+
+<body onload="init()">
+    <div id="stage" class="stage">
+        <h1 id="headline" class="display-none">El Pollo Loco</h1>
+        <div class="game">
+            <canvas id="canvas" width="720" height="480"></canvas>
+            <div id="introStart" class="overlay">
+                <div class="panel">
+                    <div class="empty"></div>
+                    <button id="btn-start" onclick="start()">Start</button>
+                </div>
+            </div>
+            <div id="outroWin" class="overlay display-none">
+                <div class="panel">
+                    <div class="empty"></div>
+                    <span>Oh yeah, you win!</span>
+                    <button onclick="restart()">Play again</button>
+                </div>
+            </div>
+            <div id="outroLost" class="overlay display-none">
+                <div class="panel">
+                    <div class="empty"></div>
+                    <button onclick="restart()">Try it again</button>
+                </div>
+            </div>
+            <div id="instruc" class="overlay instruc display-none">
+                <div class="empty"></div>
+                <div class="instrucWrapper">
+                    <span> walk: &nbsp;[&larr; | &rarr;] &nbsp; jump: &nbsp;[space] &nbsp; throw: &nbsp;[D]
+                        &nbsp; sound-on: [Q] &nbsp; sound-off: [W] &nbsp; fullscreen [F | Esc]</span>
+                </div>
+            </div>
+            <div id="hud" class="overlay hud display-none">
+                <div class="empty"></div>
+                <div class="panelBottom">
+                    <div class="panelWrapper">
+                        <button id="btn-left">
+                            <span>&#x1F878;</span>
+                        </button>
+                        <button id="btn-right">
+                            <span>&#x1F87A;</span>
+                        </button>
+                    </div>
+                    <div class="panelWrapper">
+                        <div class="toggleSwitch">
+                            <button id="btn-music-on" class="btn-on display-none">
+                                <span>&#x266B;</span></button>
+                            </button>
+                            <button id="btn-music-off" class="btn-off">
+                                <span>&#x23F8;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panelWrapper">
+                        <button id="btn-jump">
+                            <span>&#x1F879;</span>
+                        </button>
+                        <button id="btn-throw">
+                            <span>&#x271C;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="rotate" class="display-none">
+            <span>For a better gaming experience: </span>
+            <span>Please rotate Display</span>
+        </div>
+</body>
+
+</html>
