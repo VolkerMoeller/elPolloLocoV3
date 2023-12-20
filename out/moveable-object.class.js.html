@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: moveable-object.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: moveable-object.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class MoveableObject extends DrawableObject {
+    speed = 1;
+    otherDirection = false;
+    just_noises = false;
+    speedY = 0;
+    acceleration = 5;
+
+    offsetL = 0;
+    offsetR = 0;
+    offsetT = 0;
+    offsetB = 0;
+
+    energy = 100;
+    shownImg;
+    shownImgNr;
+
+    /**
+     * This function moves the picture object to the right.
+     * 
+     */
+    moveRight() {
+        this.x += this.speed;
+    }
+
+
+    /**
+     * This function moves the picture object to the left.
+     * 
+     */
+    moveLeft() {
+        this.x -= this.speed;
+    }
+
+
+    /**
+     * This function checks whether a period of time has passed.
+     * 
+     * @param {number} start – This value represents the start time.
+     * @param {*} ms – This value represents the waiting time in milliseconds.
+     * @returns – true if the time between the start time and Now is greater than the specified duration.
+     */
+    wait(start, ms) {
+        return Date.now() - start > ms;
+    }
+
+
+    /**
+     * This parameter sets the speed to a value greater than zero. 
+     * The image object is "pushed" upwards.
+     * 
+     */
+    jump() {
+        this.speedY = 40;
+    }
+
+
+    /**
+     * This function allows you to assign a specific image to the image object. 
+     * The image paths are stored in an array.
+     * 
+     * @param {array} arrImg – This is the array in which the specific image path is located.
+     * @param {number} nr – This is the index of the specific image path within the array.
+     */
+    changeImgByNr(arrImg, nr) {
+        let path = arrImg[nr];
+        this.img = this.imgCache[path];
+    }
+
+    /**
+     * This function allows you to assign an image to the image object. 
+     * The image paths are stored in an array.
+     * Within a continuous loop, the image is therefore replaced after a continuous counter. 
+     * The counter determines the number of the image path index. 
+     * The image with which the animation begins with a new call is therefore random.
+     * 
+     * @param {array} arrImg – This is the array with the image paths matching the desired animation.
+     */
+    changeImg(arrImg) {
+        let i = this.currentImage % arrImg.length;
+        let path = arrImg[i];
+        this.shownImg = arrImg[i];
+        this.shownImgNr = i;
+        this.img = this.imgCache[path];
+        this.currentImage++;
+    }
+
+    /**
+     * This function is used to play a noise or sound.
+     * 
+     * @param {object} obj – This is the audio object which is to be played.
+     * @param {number} volume – This is the volume level.
+     */
+    sound(obj, volume) {
+        obj.volume = volume;
+        obj.play();
+    }
+
+
+    /**
+     * This function is used to play (only) the noise sounds.
+     * It is ensured that the sounds of the many objects are 
+     * not played at the same time.
+     *
+     * @param {number} wait_ms – This parameter determines the milliseconds that 
+     * are waited between repeated playback of the sound.
+     * @param {number} vol – This is the volume level.
+     */
+    noises(wait_ms, vol) {
+        if (!this.just_noises)
+            this.startNoises(vol);
+        else if (this.noisesStartedAWhileAgo(wait_ms))
+            this.just_noises = false;
+    }
+
+    /**
+     * This function starts the noises.
+     * 
+     * @param {number} vol – This is the volume level.
+     */
+    startNoises(vol) {
+        this.startTime = Date.now();
+        this.sound(this.noise_sound, vol);
+        this.just_noises = true;
+    };
+
+
+    /**
+     * This function checks whether the sound is currently running and 
+     * whether a certain time has elapsed in milliseconds.
+     * 
+     * @param {number} wait_ms – The time that should pass.
+     * @returns – true if the sound is currently running and 
+     * whether a certain time has elapsed in milliseconds.
+     */
+    noisesStartedAWhileAgo(wait_ms) {
+        return this.just_noises &amp;&amp; this.wait(this.startTime, wait_ms);
+    };
+
+
+    /**
+     *This function implements a gravitational effect and
+     *does not allow the object to fall too far.
+     * 
+     * @param {number} ground_y – This parameter is the Y-position of the image object when 
+     * it looks as if the object is standing on the floor.
+     */
+    applyGravity(ground_y) {
+        setStopableInterval(() => {
+            this.theGravity(ground_y);
+            this.doNotFallTooLow(ground_y);
+        }, normalMs);
+    }
+
+
+    /**
+     * This function implements a gravitational effect
+     * 
+     * @param {number} ground_y – This parameter is the Y-position of the image object when 
+     * it looks as if the object is standing on the floor.
+     */
+    theGravity(ground_y) {
+        if (this.gravityIsRequired(ground_y)) {
+            this.y -= this.speedY;
+            this.speedY -= this.acceleration;
+        }
+    }
+
+    /**
+     * This function does not allow the object to fall too far.
+     * 
+     * @param {number} ground_y – This parameter is the Y-position of the image object when 
+     * it looks as if the object is standing on the floor.
+     */
+    doNotFallTooLow(ground_y) {
+        if (this.y > ground_y)
+            this.y = ground_y;
+    }
+
+
+    /**
+     * This function checks whether an object is above the ground.
+     * 
+     * @param {number} ground_y – This parameter is the Y-position of the image object when 
+     * it looks as if the object is standing on the floor.
+     * @returns – true if the current y-value of the position coordinate is 
+     * below the value that makes the object appear on the floor.
+     */
+    isAboveGround(ground_y) {
+        return this.y &lt; ground_y;
+    }
+
+
+    /**
+     * This function checks whether the gravity effect is required.
+     * 
+     * @param {number} ground_y – This parameter is the Y-position of the image object when 
+     * it looks as if the object is standing on the floor.
+     * @returns – true if the object appears above the ground or if there is a positiv speed.
+     */
+    gravityIsRequired(ground_y) {
+        return this.isAboveGround(ground_y) || this.speedY > 0;
+    }
+
+
+    /**
+     * This function checks whether the object is falling. 
+     * 
+     * @param {number} ground_y  – This parameter is the Y-position of the image object when 
+     * it looks as if the object is standing on the floor.
+     * @returns – true if the object appears above ground and if there is a negativ speed.
+     */
+    isFalling(ground_y) {
+        return this.isAboveGround(ground_y) &amp;&amp; this.speedY &lt; 0;
+    }
+
+    /**
+     * This function checks whether the object is rising.
+     * 
+     * @param {number} ground_y  – This parameter is the Y-position of the image object when 
+     * it looks as if the object is standing on the floor.
+     * @returns – true if the object appears above ground and if there is a positiv speed.
+     */
+    isRising(ground_y) {
+        return this.isAboveGround(ground_y) &amp;&amp; this.speedY > 0;
+    }
+
+
+    /**
+     * This function checks whether the main character is nearby the current object.
+     * 
+     * @returns – if the X-position of the image object is located within a certain distance
+     * in each case.
+     */
+    isNearby() {
+        return this.world.character.x > this.x &amp;&amp;
+            this.world.character.x - this.x &lt; 300 ||
+            this.world.character.x &lt; this.x &amp;&amp;
+            this.x - this.world.character.x &lt; 300;
+    }
+
+
+    /**
+     * This function checks whether the end boss is nearby the current object.
+     * 
+     * @returns – if the X-position of the image object is located within a certain distance
+     * in each case.
+     */
+    isNearbyEndboss() {
+        if (this.world.level.enemies[0].x) {
+            return this.world.level.enemies[0].x > this.x &amp;&amp;
+                this.world.level.enemies[0].x - this.x &lt; 300 ||
+                this.world.level.enemies[0].x &lt; this.x &amp;&amp;
+                this.x - this.world.level.enemies[0].x &lt; 300;
+        }
+    }
+
+    /**
+     * This function checks if some object is colliding with the current object.
+     * 
+     * @param {object} obj – This is the object that collides.
+     * @returns – true if the position coordinates of the objects involved overlap.
+     */
+    isColliding(obj) {
+        return ((this.x + this.offsetL) + (this.width - this.offsetR)) >= (obj.x + obj.offsetL) &amp;&amp;
+            (this.x + this.offsetL) &lt;= ((obj.x + obj.offsetL) + (obj.width - obj.offsetR)) &amp;&amp;
+            ((this.y + this.offsetT) + (this.height - this.offsetB)) >= (obj.y + obj.offsetT) &amp;&amp;
+            ((this.y + this.offsetT)) &lt;= ((obj.y + obj.offsetT) + (obj.height - obj.offsetB));
+    }
+
+
+    /**
+     * This function checks if some object is out of stage.
+     * 
+     * @param {object} obj – This is the object that may leave the stage.
+     * @returns - true if the position coordinates of the object is out of a specific area. 
+     */
+    isOutOfStage(obj) {
+        return obj.x &lt; -100 ||
+            obj.x > 5000 ||
+            obj.y > 1000 ||
+            obj.y &lt; -1000;
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="ChickenSmall.html">ChickenSmall</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="SalsaBottle.html">SalsaBottle</a></li><li><a href="Statusbar.html">Statusbar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Dec 18 2023 14:10:43 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
